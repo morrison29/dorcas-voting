@@ -1,0 +1,59 @@
+{% extends "polls/base.html" %}
+{% block content %}
+<h1>{{ contest.title }}</h1>
+<p class="muted">Each vote costs ₦{{ contest.price_per_vote }}. Send the money, tell us about it below, and your votes are added once the admin confirms the payment.</p>
+
+<div class="grid">
+  {% for c in contestants %}
+  <div class="card contestant c{{ forloop.counter0 }}">
+    {% if c.photo %}<img class="photo" src="{{ c.photo.url }}" alt="Photo of {{ c.name }}">{% else %}<div class="photo blank" aria-hidden="true">{{ c.name|slice:":1" }}</div>{% endif %}
+    <h3>{{ c.name }}</h3>
+    {% if c.tagline %}<div class="muted">{{ c.tagline }}</div>{% endif %}
+    <div class="count">{{ c.votes }}</div>
+    <div class="muted">votes · {{ c.percent }}%</div>
+    <div class="bar"><span style="width:{{ c.percent }}%"></span></div>
+  </div>
+  {% empty %}
+  <div class="card">No contestants yet. Add two in the admin site.</div>
+  {% endfor %}
+</div>
+<p class="total">Total confirmed votes: {{ total_votes }}</p>
+
+<h2>Where to send the money</h2>
+<div class="card account">
+  {% if contest.account_number %}
+    <div class="muted">{{ contest.bank_name }}</div>
+    <div class="num">{{ contest.account_number }}</div>
+    <div>{{ contest.account_name }}</div>
+  {% else %}
+    <div>Account details have not been added yet.</div>
+  {% endif %}
+</div>
+
+<h2>I have paid / I want to vote</h2>
+{% if contest.is_open and contestants %}
+<form method="post" class="card">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <label>Who are you voting for?</label>
+  {{ form.contestant }}
+  {{ form.contestant.errors }}
+
+  <label for="{{ form.votes.id_for_label }}">{{ form.votes.label }} (₦{{ contest.price_per_vote }} each)</label>
+  {{ form.votes }} {{ form.votes.errors }}
+
+  <label for="{{ form.voter_name.id_for_label }}">{{ form.voter_name.label }}</label>
+  {{ form.voter_name }} {{ form.voter_name.errors }}
+
+  <label for="{{ form.voter_phone.id_for_label }}">{{ form.voter_phone.label }}</label>
+  {{ form.voter_phone }} {{ form.voter_phone.errors }}
+
+  <label for="{{ form.sender_account_name.id_for_label }}">{{ form.sender_account_name.label }}</label>
+  {{ form.sender_account_name }} {{ form.sender_account_name.errors }}
+
+  <p><button class="btn" type="submit">Submit my payment</button></p>
+</form>
+{% else %}
+<div class="card">Voting is closed.</div>
+{% endif %}
+{% endblock %}

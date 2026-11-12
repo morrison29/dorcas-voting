@@ -1,0 +1,71 @@
+{% extends "polls/base.html" %}
+{% block title %}Admin dashboard{% endblock %}
+{% block content %}
+<h1>Admin dashboard</h1>
+<p class="muted">Check your bank app. Approve only money you can see. The vote count comes from the amount you enter (₦{{ contest.price_per_vote }} = 1 vote).</p>
+
+<div class="stats">
+  <div class="card"><div class="muted">Waiting for review</div><div class="n">{{ pending|length }}</div></div>
+  <div class="card"><div class="muted">Money confirmed</div><div class="n">₦{{ money_received }}</div></div>
+  {% for c in contestants %}
+  <div class="card"><div class="muted">{{ c.name }}</div><div class="n">{{ c.votes }} votes</div></div>
+  {% endfor %}
+</div>
+
+<h2>Pending payments</h2>
+<div class="card tablewrap">
+{% if pending %}
+<table>
+  <thead><tr><th>Reference</th><th>Voter</th><th>For</th><th>Expected</th><th>Review</th></tr></thead>
+  <tbody>
+  {% for p in pending %}
+    <tr>
+      <td><span class="ref">{{ p.reference }}</span><div class="muted">{{ p.created_at|date:"d M, H:i" }}</div></td>
+      <td>{{ p.voter_name }}<div class="muted">{{ p.voter_phone }}<br>Paid from: {{ p.sender_account_name }}</div></td>
+      <td>{{ p.contestant.name }}</td>
+      <td>₦{{ p.amount_claimed }}</td>
+      <td>
+        <form method="post" action="{% url 'approve' p.pk %}" class="inline">
+          {% csrf_token %}
+          <input type="number" name="amount_confirmed" min="1" value="{{ p.amount_claimed }}" aria-label="Amount received">
+          <button class="btn small ok" type="submit">Approve</button>
+        </form>
+        <form method="post" action="{% url 'reject' p.pk %}" class="inline" style="margin-top:6px">
+          {% csrf_token %}
+          <input type="text" name="note" placeholder="Reason (optional)" aria-label="Reason">
+          <button class="btn small bad" type="submit">Reject</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  Nothing waiting. New payments will show up here.
+{% endif %}
+</div>
+
+<h2>Recently reviewed</h2>
+<div class="card tablewrap">
+{% if reviewed %}
+<table>
+  <thead><tr><th>Reference</th><th>Voter</th><th>For</th><th>Result</th><th>By</th></tr></thead>
+  <tbody>
+  {% for p in reviewed %}
+    <tr>
+      <td><span class="ref">{{ p.reference }}</span></td>
+      <td>{{ p.voter_name }}</td>
+      <td>{{ p.contestant.name }}</td>
+      <td><span class="badge {{ p.status }}">{{ p.get_status_display }}</span>
+        {% if p.status == "approved" %} ₦{{ p.amount_confirmed }} → {{ p.votes_awarded }} vote(s){% elif p.note %} {{ p.note }}{% endif %}</td>
+      <td>{{ p.reviewed_by.username|default:"-" }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  No reviewed payments yet.
+{% endif %}
+</div>
+<p><a href="/admin/">Open Django admin</a> to set the bank account, price and contestants.</p>
+{% endblock %}

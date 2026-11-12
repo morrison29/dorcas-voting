@@ -1,0 +1,26 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ contest.title }}{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'polls/style.css' %}">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a href="{% url 'home' %}">{{ contest.title }}</a>
+    <nav>
+      {% if user.is_staff %}
+        <a class="btn small ghost" href="{% url 'dashboard' %}">Admin dashboard</a>
+      {% else %}
+        <a class="btn small ghost" href="{% url 'dashboard' %}">Admin login</a>
+      {% endif %}
+    </nav>
+  </header>
+  {% for m in messages %}<div class="msg {{ m.tags }}">{{ m }}</div>{% endfor %}
+  {% block content %}{% endblock %}
+</div>
+</body>
+</html>

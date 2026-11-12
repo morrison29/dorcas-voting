@@ -1,0 +1,17 @@
+{% extends "polls/base.html" %}
+{% block content %}
+<h1>Payment {{ payment.get_status_display|lower }}</h1>
+<div class="card">
+  <p>Reference: <span class="ref">{{ payment.reference }}</span> <span class="badge {{ payment.status }}">{{ payment.get_status_display }}</span></p>
+  <p>Voting for <strong>{{ payment.contestant.name }}</strong> · expected payment ₦{{ payment.amount_claimed }}.</p>
+  {% if payment.status == "pending" %}
+    <p>Send <strong>₦{{ payment.amount_claimed }}</strong> to {{ contest.bank_name }} <strong>{{ contest.account_number }}</strong> ({{ contest.account_name }}). Put <span class="ref">{{ payment.reference }}</span> in the transfer narration if your bank allows it.</p>
+    <p class="muted">Save this page's link. Come back to see when the admin has confirmed your payment.</p>
+  {% elif payment.status == "approved" %}
+    <p>Confirmed. <strong>{{ payment.votes_awarded }}</strong> vote(s) added to {{ payment.contestant.name }}.</p>
+  {% else %}
+    <p>We could not confirm this payment.{% if payment.note %} Reason: {{ payment.note }}{% endif %}</p>
+  {% endif %}
+  <a class="btn ghost" href="{% url 'home' %}">Back to voting</a>
+</div>
+{% endblock %}
