@@ -3,7 +3,7 @@
 <h1>{{ contest.title }}</h1>
 <p class="muted">Each vote costs ₦{{ contest.price_per_vote }}. Send the money, tell us about it below, and your votes are added once the admin confirms the payment.</p>
 
-<div class="grid">
+<div class="grid contestants">
   {% for c in contestants %}
   <div class="card contestant c{{ forloop.counter0 }}">
     {% if c.photo %}<img class="photo" src="{{ c.photo.url }}" alt="Photo of {{ c.name }}">{% else %}<div class="photo blank" aria-hidden="true">{{ c.name|slice:":1" }}</div>{% endif %}
@@ -14,7 +14,7 @@
     <div class="bar"><span style="width:{{ c.percent }}%"></span></div>
   </div>
   {% empty %}
-  <div class="card">No contestants yet. Add two in the admin site.</div>
+  <div class="card">No contestants yet. Add them in the admin site.</div>
   {% endfor %}
 </div>
 <p class="total">Total confirmed votes: {{ total_votes }}</p>

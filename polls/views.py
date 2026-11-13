@@ -11,7 +11,7 @@ from .models import Contest, Contestant, Payment
 
 def home(request):
     contest = Contest.get()
-    contestants = list(Contestant.objects.with_votes().order_by("id")[:2])
+    contestants = list(Contestant.objects.with_votes().order_by("id"))
     total = sum(c.votes for c in contestants)
     for c in contestants:
         c.percent = round(c.votes * 100 / total) if total else 0
