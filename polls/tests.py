@@ -47,6 +47,46 @@ class VotingFlowTests(TestCase):
             self.assertContains(r, "contestants/ada")
             self.assertContains(r, 'class="photo blank"')  # Bola has no photo
 
+    def test_three_contestants_all_shown(self):
+        Contestant.objects.create(name="Chidi")
+        r = self.client.get(reverse("home"))
+        self.assertEqual(len(r.context["contestants"]), 3)
+        self.assertContains(r, "Chidi")
+        self.assertContains(self.client.get(reverse("home")), 'value="%d"' % Contestant.objects.get(name="Chidi").pk)
+
+    def test_leading_ribbon_only_for_clear_leader(self):
+        self.pay(2)
+        p = Payment.objects.get()
+        # nobody has confirmed votes yet -> no leader
+        self.assertFalse(any(c.leading for c in self.client.get(reverse("home")).context["contestants"]))
+        self.client.login(username="boss", password="pw")
+        self.client.post(reverse("approve", args=[p.pk]), {"amount_confirmed": 100})
+        flags = {c.name: c.leading for c in self.client.get(reverse("home")).context["contestants"]}
+        self.assertEqual(flags, {"Ada": True, "Bola": False})
+
+    def test_description_default_and_custom(self):
+        r = self.client.get(reverse("home"))
+        self.assertContains(r, "great catering showdown")
+        c = Contest.get(); c.description = "Cook-off 2026: may the best jollof win."; c.save()
+        r = self.client.get(reverse("home"))
+        self.assertContains(r, "may the best jollof win")
+        self.assertNotContains(r, "great catering showdown")
+
+    def test_banner_used_in_hero(self):
+        import tempfile
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        from django.test import override_settings
+        from io import BytesIO
+        from PIL import Image
+        buf = BytesIO(); Image.new("RGB", (20, 10), "orange").save(buf, "PNG")
+        with tempfile.TemporaryDirectory() as tmp, override_settings(MEDIA_ROOT=tmp):
+            c = Contest.get()
+            c.banner = SimpleUploadedFile("food.png", buf.getvalue(), content_type="image/png")
+            c.save()
+            r = self.client.get(reverse("home"))
+            self.assertContains(r, "hero-photo")
+            self.assertContains(r, "banners/food")
+
     def test_pending_votes_do_not_count(self):
         self.pay(3)
         r = self.client.get(reverse("home"))

@@ -15,6 +15,7 @@ header.top{background:var(--maroon);color:#fff}
 .navlink:hover{background:#fff;color:var(--maroon)}
 header.top a:focus-visible{outline:3px solid #fff;outline-offset:2px}
 
+h1,h2,.brand,.contestant h3,.count{font-family:Georgia,"Times New Roman",serif}
 h1{font-size:1.9rem;line-height:1.2;margin:.4em 0;color:var(--maroon)}
 h2{font-size:1.2rem;margin:1.6em 0 .6em;color:var(--maroon-dark);padding-bottom:6px;border-bottom:2px solid var(--tint)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px}
@@ -37,9 +38,9 @@ h2{font-size:1.2rem;margin:1.6em 0 .6em;color:var(--maroon-dark);padding-bottom:
 label{display:block;font-weight:600;margin:14px 0 4px}
 input[type=text],input[type=number],input[type=tel]{width:100%;padding:10px 12px;border:1px solid #cdb4ba;border-radius:8px;font:inherit;background:#fff;color:var(--ink)}
 input:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(--maroon);outline-offset:2px}
-ul.choices{list-style:none;margin:0;padding:0;display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
-ul.choices label{display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:12px;margin:0;cursor:pointer}
-ul.choices label:has(input:checked){border-color:var(--maroon);background:var(--tint);box-shadow:inset 0 0 0 1px var(--maroon)}
+#id_contestant{list-style:none;margin:0;padding:0;display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+#id_contestant label{display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:12px;margin:0;cursor:pointer}
+#id_contestant label:has(input:checked){border-color:var(--maroon);background:var(--tint);box-shadow:inset 0 0 0 1px var(--maroon)}
 input[type=radio]{accent-color:var(--maroon)}
 
 .btn{display:inline-block;background:var(--maroon);color:#fff;border:0;border-radius:8px;padding:11px 18px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none}
@@ -68,3 +69,37 @@ th{color:var(--maroon-dark);background:var(--tint)}
 .ref{font-family:ui-monospace,Consolas,monospace;font-weight:700;color:var(--maroon-dark)}
 .stats{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
 .stats .card .n{font-size:1.8rem;font-weight:800;color:var(--maroon)}
+
+/* ---------- catering look ---------- */
+.hero{color:#fff;text-align:center;
+  background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.09) 0 2px,transparent 3px) 0 0/26px 26px,
+             linear-gradient(135deg,var(--maroon) 0%,var(--maroon-dark) 100%);
+  border-bottom:4px solid #d9b45a}
+.hero-inner{max-width:720px;margin:0 auto;padding:36px 16px 40px}
+.hero-icon{width:64px;height:64px;color:#f3dfa6}
+.eyebrow{margin:6px 0 0;letter-spacing:.25em;text-transform:uppercase;font-size:.8rem;color:#f3dfa6;font-weight:700}
+.hero h1{color:#fff;font-size:2.4rem;margin:.2em 0}
+.hero-sub{margin:0;font-size:1.05rem;color:#f6e7ea}
+@media(max-width:640px){.hero h1{font-size:1.8rem}}
+
+.steps{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.steps li{display:flex;gap:12px;align-items:center;background:var(--tint);border-radius:10px;padding:12px 14px}
+.steps .n{flex:none;width:34px;height:34px;border-radius:50%;background:var(--maroon);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif}
+
+.contestant{position:relative;border-top:4px solid var(--maroon);text-align:center}
+.contestant .photo{border-radius:8px}
+.photo.blank svg{width:45%;height:45%;color:var(--maroon);opacity:.55}
+.entry{font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.tagline{font-style:italic;color:var(--muted);margin-top:2px}
+.ribbon{position:absolute;top:14px;left:14px;z-index:1;background:#d9b45a;color:var(--maroon-dark);font-weight:800;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px}
+
+#id_contestant label{font-family:Georgia,serif}
+h2::before{content:"✦ ";color:#d9b45a}
+
+/* ---------- food + description ---------- */
+.hero.hero-photo{background-size:cover;background-position:center;background-repeat:no-repeat}
+.food-row{display:flex;justify-content:center;gap:18px;margin-top:20px;flex-wrap:wrap}
+.food-row svg{width:38px;height:38px;color:#f3dfa6;opacity:.9}
+.about{border-left:5px solid #d9b45a}
+.about p{margin:.4em 0}
+.steps{margin-top:18px}

@@ -14,6 +14,14 @@ class Contest(models.Model):
     account_name = models.CharField(max_length=120, blank=True)
     account_number = models.CharField(max_length=20, blank=True)
     is_open = models.BooleanField(default=True, help_text="Untick to stop new payments")
+    description = models.TextField(
+        blank=True,
+        help_text="About the competition (shown on the home page). Leave empty to use the default text.",
+    )
+    banner = models.ImageField(
+        upload_to="banners/", blank=True,
+        help_text="Optional food photo for the top banner. Wide photos work best (about 1600px wide, under 10 MB).",
+    )
 
     def __str__(self):
         return self.title

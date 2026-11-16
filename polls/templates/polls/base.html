@@ -8,10 +8,57 @@
   <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="cloche" viewBox="0 0 64 64">
+    <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="32" cy="14" r="3.5"/>
+      <path d="M10 44a22 22 0 0 1 44 0"/>
+      <path d="M5 44h54"/>
+      <path d="M9 52h46"/>
+      <path d="M18 36a15 15 0 0 1 9-10"/>
+    </g>
+  </symbol>
+  <symbol id="bowl" viewBox="0 0 64 64">
+    <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 32h48c0 12-10 22-24 22S8 44 8 32z"/>
+      <path d="M24 24c-3-3 3-5 0-9M32 24c-3-3 3-5 0-9M40 24c-3-3 3-5 0-9"/>
+    </g>
+  </symbol>
+  <symbol id="cutlery" viewBox="0 0 64 64">
+    <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 8v14a7 7 0 0 0 14 0V8M23 8v14M23 29v27"/>
+      <path d="M46 8c-5 4-7 12-7 21h7V8zM46 29v27"/>
+    </g>
+  </symbol>
+  <symbol id="chefhat" viewBox="0 0 64 64">
+    <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 42c-6 0-11-4-11-10s5-10 11-9c2-6 8-9 13-9s11 3 13 9c6-1 11 3 11 9s-5 10-11 10"/>
+      <path d="M19 42v12h26V42M19 48h26"/>
+    </g>
+  </symbol>
+  <symbol id="cupcake" viewBox="0 0 64 64">
+    <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 34h28l-4 20H22z"/>
+      <path d="M14 34c0-9 7-13 18-13s18 4 18 13z"/>
+      <circle cx="32" cy="14" r="3"/>
+      <path d="M26 40l2 10M34 40l-1 10M40 40l-2 10"/>
+    </g>
+  </symbol>
+  <symbol id="pot" viewBox="0 0 64 64">
+    <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 30h40v18a8 8 0 0 1-8 8H20a8 8 0 0 1-8-8z"/>
+      <path d="M8 30h48M12 38H5M52 38h7"/>
+      <path d="M24 22c-3-3 3-5 0-9M32 22c-3-3 3-5 0-9M40 22c-3-3 3-5 0-9"/>
+    </g>
+  </symbol>
+</svg>
+<header class="top">
+  <div class="bar-inner">
+    <a class="brand" href="{% url 'home' %}">{{ contest.title }}</a>
+  </div>
+</header>
+{% block hero %}{% endblock %}
 <div class="wrap">
-  <header class="top">
-    <a href="{% url 'home' %}">{{ contest.title }}</a>
-  </header>
   {% for m in messages %}<div class="msg {{ m.tags }}">{{ m }}</div>{% endfor %}
   {% block content %}{% endblock %}
 </div>

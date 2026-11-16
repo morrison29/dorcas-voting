@@ -1,14 +1,48 @@
 {% extends "polls/base.html" %}
-{% block content %}
-<h1>{{ contest.title }}</h1>
-<p class="muted">Each vote costs ₦{{ contest.price_per_vote }}. Send the money, tell us about it below, and your votes are added once the admin confirms the payment.</p>
 
+{% block hero %}
+<section class="hero{% if contest.banner %} hero-photo{% endif %}"{% if contest.banner %} style="background-image:linear-gradient(rgba(90,14,29,.78),rgba(90,14,29,.9)),url('{{ contest.banner.url }}')"{% endif %}>
+  <div class="hero-inner">
+    <svg class="hero-icon" aria-hidden="true"><use href="#cloche"/></svg>
+    <p class="eyebrow">Dorcas Catering Competition</p>
+    <h1>{{ contest.title }}</h1>
+    <div class="food-row" aria-hidden="true">
+      <svg><use href="#chefhat"/></svg><svg><use href="#pot"/></svg><svg><use href="#bowl"/></svg><svg><use href="#cutlery"/></svg><svg><use href="#cupcake"/></svg>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<h2>About the competition</h2>
+<div class="card about">
+  {% if contest.description %}
+    {{ contest.description|linebreaks }}
+  {% else %}
+    <p>Welcome to the Dorcas catering showdown, the first of its kind. Our contestants have put their best dishes forward, each one hoping to be crowned the favourite caterer.</p>
+    <p>Taste, share and back your favourite. The person with the most confirmed votes when voting closes takes the crown, and every ₦{{ contest.price_per_vote }} you send counts as one vote.</p>
+  {% endif %}
+</div>
+
+<section>
+<ol class="steps">
+  <li><span class="n">1</span><div><strong>Choose</strong><br><span class="muted">Pick your favourite caterer</span></div></li>
+  <li><span class="n">2</span><div><strong>Pay</strong><br><span class="muted">Send ₦{{ contest.price_per_vote }} per vote to our account. You can pay for as much as you want to.</span></div></li>
+  <li><span class="n">3</span><div><strong>Counted</strong><br><span class="muted">Your votes are added once we confirm</span></div></li>
+</ol>
+</section>
+
+
+<section class="contestants-section">
+<h2>The contestants</h2>
 <div class="grid contestants">
   {% for c in contestants %}
   <div class="card contestant c{{ forloop.counter0 }}">
-    {% if c.photo %}<img class="photo" src="{{ c.photo.url }}" alt="Photo of {{ c.name }}">{% else %}<div class="photo blank" aria-hidden="true">{{ c.name|slice:":1" }}</div>{% endif %}
+    {% if c.leading %}<span class="ribbon">Leading</span>{% endif %}
+    {% if c.photo %}<img class="photo" src="{{ c.photo.url }}" alt="Photo of {{ c.name }}">{% else %}<div class="photo blank" aria-hidden="true"><svg><use href="#cloche"/></svg></div>{% endif %}
+    <div class="entry">Entry No. {{ forloop.counter }}</div>
     <h3>{{ c.name }}</h3>
-    {% if c.tagline %}<div class="muted">{{ c.tagline }}</div>{% endif %}
+    {% if c.tagline %}<div class="tagline">{{ c.tagline }}</div>{% endif %}
     <div class="count">{{ c.votes }}</div>
     <div class="muted">votes · {{ c.percent }}%</div>
     <div class="bar"><span style="width:{{ c.percent }}%"></span></div>
@@ -19,7 +53,8 @@
 </div>
 <p class="total">Total confirmed votes: {{ total_votes }}</p>
 
-<h2>Where to send the money</h2>
+</section>
+<h2>Where to send your payment</h2>
 <div class="card account">
   {% if contest.account_number %}
     <div class="muted">{{ contest.bank_name }}</div>
@@ -30,7 +65,7 @@
   {% endif %}
 </div>
 
-<h2>I have paid / I want to vote</h2>
+<h2>Cast your vote</h2>
 {% if contest.is_open and contestants %}
 <form method="post" class="card">
   {% csrf_token %}
